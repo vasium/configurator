@@ -1,170 +1,170 @@
 import "./Main.css";
 
 function Main() {
-  async function run() {
-    async function onReadyLast(id) {
-      console.log("API ready..");
-      /******* Last 3D Viewer *******/
-      /* Set defaults */
-      // vctrApi.setVisibility("LegFb", true, false);
-      // vctrApi.setVisibility("LegRod", false, false);
-      // let globalRotX = 0;
-      // let globalRotY = 0;
-      // const rangeTune = 0.8;
-      document
-        .querySelector(`#${id}`)
-        .closest('[js="mouse-move-bounds"')
-        .addEventListener("mousemove", async (e) => {
-          // const normX = e.clientX / window.innerWidth;
-          // const normY = e.clientY / window.innerHeight;
-          // const rotX = rangeTune * (normX - 0.5);
-          // const rotY = rangeTune * (normY - 0.5);
-          // vctrApi.rotateView([rotX - globalRotX, rotY - globalRotY]);
-          // globalRotX = rotX;
-          // globalRotY = rotY;
-        });
-      function changeMaterial(updatedMaterial) {
-        //   vctrApi.updateMaterial("LegFBShell1", updatedMaterial);
-        //   vctrApi.updateMaterial("LegFBShell2", updatedMaterial);
-        //   vctrApi.updateMaterial("Pillow1", updatedMaterial);
-        //   vctrApi.updateMaterial("Pillow2", updatedMaterial);
-        //   vctrApi.updateMaterial("LegRod1", updatedMaterial);
-        //   vctrApi.updateMaterial("LegRod2", updatedMaterial);
-      }
+  // async function run() {
+  //   async function onReadyLast(id) {
+  //     console.log("API ready..");
+  //     /******* Last 3D Viewer *******/
+  //     /* Set defaults */
+  //     // vctrApi.setVisibility("LegFb", true, false);
+  //     // vctrApi.setVisibility("LegRod", false, false);
+  //     // let globalRotX = 0;
+  //     // let globalRotY = 0;
+  //     // const rangeTune = 0.8;
+  //     document
+  //       .querySelector(`#${id}`)
+  //       .closest('[js="mouse-move-bounds"')
+  //       .addEventListener("mousemove", async (e) => {
+  //         // const normX = e.clientX / window.innerWidth;
+  //         // const normY = e.clientY / window.innerHeight;
+  //         // const rotX = rangeTune * (normX - 0.5);
+  //         // const rotY = rangeTune * (normY - 0.5);
+  //         // vctrApi.rotateView([rotX - globalRotX, rotY - globalRotY]);
+  //         // globalRotX = rotX;
+  //         // globalRotY = rotY;
+  //       });
+  //     function changeMaterial(updatedMaterial) {
+  //       //   vctrApi.updateMaterial("LegFBShell1", updatedMaterial);
+  //       //   vctrApi.updateMaterial("LegFBShell2", updatedMaterial);
+  //       //   vctrApi.updateMaterial("Pillow1", updatedMaterial);
+  //       //   vctrApi.updateMaterial("Pillow2", updatedMaterial);
+  //       //   vctrApi.updateMaterial("LegRod1", updatedMaterial);
+  //       //   vctrApi.updateMaterial("LegRod2", updatedMaterial);
+  //     }
 
-      document.querySelector("#hue").addEventListener("input", (e) => {
-        const h = e.currentTarget.value;
-        const s = 30;
-        const l = 30;
-        const newColor = HSLAToHexA(h, s, l);
-        document.querySelector("#hue-hex").value = newColor;
-        document.querySelector("#hue-color").style.backgroundColor = newColor;
-        document.querySelector(".h-section_arapi").style.backgroundColor =
-          newColor;
-        const updatedMaterial = { color: newColor };
-        changeMaterial(updatedMaterial);
-        setPositionToRangeHandler(newColor);
-      });
-      function changeColorAutomaticaly() {
-        let i = 0;
-        const interval = setInterval(function () {
-          const newColor = HSLAToHexA(i, 30, 30);
-          //$('#color').css('background-color', newColor);
-          document.querySelector("#hue").value = i;
-          changeMaterial({ color: newColor });
-          setPositionToRangeHandler(newColor);
-          i = i > 350 ? 0 : i + 1;
-        }, 50);
-        document.querySelector("#hue").addEventListener("change", (_e) => {
-          clearInterval(interval);
-        });
-        document.querySelector("#hue").addEventListener("mousedown", (_e) => {
-          clearInterval(interval);
-        });
-      }
-      function setPositionToRangeHandler(newColor) {
-        const sliderRange = document.querySelector("#hue").value;
-        const sliderPosition = 2.5 + (93 / 360) * sliderRange;
-        const sliderColor = newColor;
-        document.documentElement.style.setProperty(
-          "--hue-range-color",
-          sliderColor
-        );
-        document.querySelector("#hue-color").style.left = sliderPosition + "%";
-      }
-      function HSLAToHexA(h, s, l) {
-        s /= 100;
-        l /= 100;
-        let c = (1 - Math.abs(2 * l - 1)) * s,
-          x = c * (1 - Math.abs(((h / 60) % 2) - 1)),
-          m = l - c / 2,
-          r = 0,
-          g = 0,
-          b = 0;
-        if (0 <= h && h < 60) {
-          r = c;
-          g = x;
-          b = 0;
-        } else if (60 <= h && h < 120) {
-          r = x;
-          g = c;
-          b = 0;
-        } else if (120 <= h && h < 180) {
-          r = 0;
-          g = c;
-          b = x;
-        } else if (180 <= h && h < 240) {
-          r = 0;
-          g = x;
-          b = c;
-        } else if (240 <= h && h < 300) {
-          r = x;
-          g = 0;
-          b = c;
-        } else if (300 <= h && h < 360) {
-          r = c;
-          g = 0;
-          b = x;
-        }
-        // Having obtained RGB, convert channels to hex
-        r = Math.round((r + m) * 255).toString(16);
-        g = Math.round((g + m) * 255).toString(16);
-        b = Math.round((b + m) * 255).toString(16);
-        if (r.length === 1) r = "0" + r;
-        if (g.length === 1) g = "0" + g;
-        if (b.length === 1) b = "0" + b;
-        return "#" + r + g + b;
-      }
-      // const allButtons = document.querySelectorAll(
-      //   ".customizer-group .customizer-item"
-      // );
+  //     document.querySelector("#hue").addEventListener("input", (e) => {
+  //       const h = e.currentTarget.value;
+  //       const s = 30;
+  //       const l = 30;
+  //       const newColor = HSLAToHexA(h, s, l);
+  //       document.querySelector("#hue-hex").value = newColor;
+  //       document.querySelector("#hue-color").style.backgroundColor = newColor;
+  //       document.querySelector(".h-section_arapi").style.backgroundColor =
+  //         newColor;
+  //       const updatedMaterial = { color: newColor };
+  //       changeMaterial(updatedMaterial);
+  //       setPositionToRangeHandler(newColor);
+  //     });
+  //     function changeColorAutomaticaly() {
+  //       let i = 0;
+  //       const interval = setInterval(function () {
+  //         const newColor = HSLAToHexA(i, 30, 30);
+  //         //$('#color').css('background-color', newColor);
+  //         document.querySelector("#hue").value = i;
+  //         changeMaterial({ color: newColor });
+  //         setPositionToRangeHandler(newColor);
+  //         i = i > 350 ? 0 : i + 1;
+  //       }, 50);
+  //       document.querySelector("#hue").addEventListener("change", (_e) => {
+  //         clearInterval(interval);
+  //       });
+  //       document.querySelector("#hue").addEventListener("mousedown", (_e) => {
+  //         clearInterval(interval);
+  //       });
+  //     }
+  //     function setPositionToRangeHandler(newColor) {
+  //       const sliderRange = document.querySelector("#hue").value;
+  //       const sliderPosition = 2.5 + (93 / 360) * sliderRange;
+  //       const sliderColor = newColor;
+  //       document.documentElement.style.setProperty(
+  //         "--hue-range-color",
+  //         sliderColor
+  //       );
+  //       document.querySelector("#hue-color").style.left = sliderPosition + "%";
+  //     }
+  //     function HSLAToHexA(h, s, l) {
+  //       s /= 100;
+  //       l /= 100;
+  //       let c = (1 - Math.abs(2 * l - 1)) * s,
+  //         x = c * (1 - Math.abs(((h / 60) % 2) - 1)),
+  //         m = l - c / 2,
+  //         r = 0,
+  //         g = 0,
+  //         b = 0;
+  //       if (0 <= h && h < 60) {
+  //         r = c;
+  //         g = x;
+  //         b = 0;
+  //       } else if (60 <= h && h < 120) {
+  //         r = x;
+  //         g = c;
+  //         b = 0;
+  //       } else if (120 <= h && h < 180) {
+  //         r = 0;
+  //         g = c;
+  //         b = x;
+  //       } else if (180 <= h && h < 240) {
+  //         r = 0;
+  //         g = x;
+  //         b = c;
+  //       } else if (240 <= h && h < 300) {
+  //         r = x;
+  //         g = 0;
+  //         b = c;
+  //       } else if (300 <= h && h < 360) {
+  //         r = c;
+  //         g = 0;
+  //         b = x;
+  //       }
+  //       // Having obtained RGB, convert channels to hex
+  //       r = Math.round((r + m) * 255).toString(16);
+  //       g = Math.round((g + m) * 255).toString(16);
+  //       b = Math.round((b + m) * 255).toString(16);
+  //       if (r.length === 1) r = "0" + r;
+  //       if (g.length === 1) g = "0" + g;
+  //       if (b.length === 1) b = "0" + b;
+  //       return "#" + r + g + b;
+  //     }
+  //     // const allButtons = document.querySelectorAll(
+  //     //   ".customizer-group .customizer-item"
+  //     // );
 
-      changeColorAutomaticaly();
-    }
-    try {
-      // let iteration = 0;
-      function initViewer(id, onReady) {
-        onReady(id);
-      }
-      if ("IntersectionObserver" in window) {
-        const IntObsOpts = {
-          rootMargin: "100px",
-          threshold: 0,
-        };
-        const callback = (entries, observer) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              switch (entry.target.id) {
-                // case "test":
-                //   initViewer(entry.target.id, onReadyViewer);
-                //   break;
-                // case "watch":
-                //   initViewer(entry.target.id, onReadyWatch);
-                //   break;
-                case "viewer3":
-                  initViewer(entry.target.id, onReadyLast);
-                  break;
+  //     changeColorAutomaticaly();
+  //   }
+  //   try {
+  //     // let iteration = 0;
+  //     function initViewer(id, onReady) {
+  //       onReady(id);
+  //     }
+  //     if ("IntersectionObserver" in window) {
+  //       const IntObsOpts = {
+  //         rootMargin: "100px",
+  //         threshold: 0,
+  //       };
+  //       const callback = (entries, observer) => {
+  //         entries.forEach((entry) => {
+  //           if (entry.isIntersecting) {
+  //             switch (entry.target.id) {
+  //               // case "test":
+  //               //   initViewer(entry.target.id, onReadyViewer);
+  //               //   break;
+  //               // case "watch":
+  //               //   initViewer(entry.target.id, onReadyWatch);
+  //               //   break;
+  //               case "viewer":
+  //                 initViewer(entry.target.id, onReadyLast);
+  //                 break;
 
-                default:
-                // do nothing
-              }
-              observer.unobserve(entry.target);
-            }
-          });
-        };
-        const observer = new IntersectionObserver(callback, IntObsOpts);
-        const targets = document.querySelectorAll("model-viewer");
-        targets.forEach((target) => observer.observe(target));
-      } else {
-        // await initViewer("test", onReadyViewer);
-        // await initViewer("watch", onReadyWatch);
-        await initViewer("viewer3", onReadyLast);
-      }
-    } catch (e) {
-      // errHandler(e);
-    }
-  }
-  run();
+  //               default:
+  //               // do nothing
+  //             }
+  //             observer.unobserve(entry.target);
+  //           }
+  //         });
+  //       };
+  //       const observer = new IntersectionObserver(callback, IntObsOpts);
+  //       const targets = document.querySelectorAll("model-viewer");
+  //       targets.forEach((target) => observer.observe(target));
+  //     } else {
+  //       // await initViewer("test", onReadyViewer);
+  //       // await initViewer("watch", onReadyWatch);
+  //       await initViewer("viewer", onReadyLast);
+  //     }
+  //   } catch (e) {
+  //     // errHandler(e);
+  //   }
+  // }
+  // run();
 
   return (
     <div>
@@ -192,7 +192,7 @@ function Main() {
                   data-js-focus-visible=""
                   camera-orbit="225deg 55deg 1m"
                   style={{ width: "100%", height: "100%" }}
-                  id="viewer3"
+                  id="viewer"
                   src=""
                   ar
                   ar-modes="webxr scene-viewer"
