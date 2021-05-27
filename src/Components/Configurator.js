@@ -12,8 +12,10 @@ import pillow03 from "./img/pillow03.jpg";
 import wood01 from "./img/wood01.jpg";
 import wood02 from "./img/wood02.jpg";
 import wood03 from "./img/wood03.jpg";
-import { useEffect } from "react";
-import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
+// TEST START
+// import { useEffect } from "react";
+// import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
+// TEST END
 
 function Configurator() {
   const modelPath = Logo;
@@ -21,25 +23,25 @@ function Configurator() {
   var activeOption;
 
   // TEST START
-  const scene = new THREE.Scene();
+  // const scene = new THREE.Scene();
 
-  const camera = new THREE.PerspectiveCamera(
-    45,
-    window.innerWidth / window.innerHeight,
-    1,
-    10000
-  );
-  camera.position.set(0, 0, 2);
+  // const camera = new THREE.PerspectiveCamera(
+  //   45,
+  //   window.innerWidth / window.innerHeight,
+  //   1,
+  //   10000
+  // );
+  // camera.position.set(0, 0, 2);
 
-  const renderer = new THREE.WebGLRenderer();
-  renderer.setSize(window.innerWidth, window.innerHeight);
-  useEffect(() => {
-    document.body.appendChild(renderer.domElement);
-    // eslint-disable-next-line
-  }, []);
+  // const renderer = new THREE.WebGLRenderer();
+  // renderer.setSize(window.innerWidth, window.innerHeight);
+  // useEffect(() => {
+  //   document.body.appendChild(renderer.domElement);
+  //   // eslint-disable-next-line
+  // }, []);
 
-  const ambientLight = new THREE.AmbientLight(0xffffff);
-  scene.add(ambientLight);
+  // const ambientLight = new THREE.AmbientLight(0xffffff);
+  // scene.add(ambientLight);
   // TEST END
 
   const materials = [
@@ -155,7 +157,7 @@ function Configurator() {
         });
       }
       // TEST START
-      scene.add(gltf.scene);
+      // scene.add(gltf.scene);
       // TEST END
       exportGLTF();
     },
@@ -185,8 +187,12 @@ function Configurator() {
         // Query for elements matching the specified selector
         Array.from(document.querySelectorAll(selector)).forEach((button) => {
           button.addEventListener("click", (event) => {
-            button.classList.remove("active");
-            event.currentTarget.classList.add("active");
+            Array.from(
+              event.currentTarget.parentNode.querySelectorAll(selector)
+            ).forEach((button) => {
+              button.classList.remove("active");
+            });
+            button.classList.add("active");
             activeOption = event.currentTarget.dataset.option;
             selectOption();
             resolve(button);
@@ -319,14 +325,14 @@ function Configurator() {
   }
 
   // TEST START
-  const controls = new OrbitControls(camera, renderer.domElement);
+  // const controls = new OrbitControls(camera, renderer.domElement);
 
-  function animate() {
-    requestAnimationFrame(animate);
-    controls.update();
-    renderer.render(scene, camera);
-  }
-  animate();
+  // function animate() {
+  //   requestAnimationFrame(animate);
+  //   controls.update();
+  //   renderer.render(scene, camera);
+  // }
+  // animate();
   // TEST END
 
   return <div></div>;
