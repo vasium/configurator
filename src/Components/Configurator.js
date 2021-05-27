@@ -13,14 +13,51 @@ import wood01 from "./img/wood01.jpg";
 import wood02 from "./img/wood02.jpg";
 import wood03 from "./img/wood03.jpg";
 // TEST START
-// import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 // import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 // TEST END
+import { IMAGES } from "./Images";
 
 function Configurator() {
   const modelPath = Logo;
   var gltfScene;
   var activeOption;
+
+  // const metal01 = useRef(null);
+  // const metal02 = useRef(null);
+  // const metal03 = useRef(null);
+  // const pillow01 = useRef(null);
+  // const pillow02 = useRef(null);
+  // const pillow03 = useRef(null);
+  // const wood01 = useRef(null);
+  // const wood02 = useRef(null);
+  // const wood03 = useRef(null);
+
+  ///images loader
+  const [imgsLoaded, setImgsLoaded] = useState(false);
+
+  useEffect(() => {
+    const loadImage = (image) => {
+      return new Promise((resolve, reject) => {
+        const loadImg = new Image();
+        loadImg.src = image.url;
+        // wait 2 seconds to simulate loading time
+        loadImg.onload = () =>
+          // setTimeout(() => {
+          resolve(image.url);
+        // }, 2000);
+
+        loadImg.onerror = (err) => reject(err);
+      });
+    };
+
+    Promise.all(IMAGES.map((image) => loadImage(image)))
+      .then(() => setImgsLoaded(true))
+      .catch((err) => console.log("Failed to load images", err));
+  }, []);
+
+  // console.log("metal02", metal01.current);
+  ///images loader
 
   // TEST START
   // const scene = new THREE.Scene();
@@ -46,11 +83,56 @@ function Configurator() {
 
   const materials = [
     {
-      color: "438AAC",
+      texture: metal01,
+      size: [6, 6, 6],
+      shininess: 60,
     },
     {
-      color: "000000",
+      texture: metal02,
+      size: [6, 6, 6],
+      shininess: 60,
     },
+    {
+      texture: metal03,
+      size: [6, 6, 6],
+      shininess: 60,
+    },
+    {
+      texture: pillow01,
+      size: [6, 6, 6],
+      shininess: 60,
+    },
+    {
+      texture: pillow02,
+      size: [6, 6, 6],
+      shininess: 60,
+    },
+    {
+      texture: pillow03,
+      size: [6, 6, 6],
+      shininess: 60,
+    },
+    {
+      texture: wood01,
+      size: [6, 6, 6],
+      shininess: 60,
+    },
+    {
+      texture: wood02,
+      size: [6, 6, 6],
+      shininess: 60,
+    },
+    {
+      texture: wood03,
+      size: [6, 6, 6],
+      shininess: 60,
+    },
+    // {
+    //   color: "438AAC",
+    // },
+    // {
+    //   color: "000000",
+    // },
   ];
 
   let txt1 = new THREE.TextureLoader().load(metal01);
@@ -59,9 +141,8 @@ function Configurator() {
   txt1.wrapT = THREE.RepeatWrapping;
 
   const initialMaterial1 = new THREE.MeshStandardMaterial({
-    color: 0xbfff00,
-
-    // map: txt1,
+    // color: 0xbfff00,
+    map: txt1,
   });
 
   let txt2 = new THREE.TextureLoader().load(pillow01);
@@ -71,9 +152,8 @@ function Configurator() {
   txt2.wrapT = THREE.RepeatWrapping;
 
   const initialMaterial2 = new THREE.MeshStandardMaterial({
-    color: 0x000000,
-
-    // map: txt2,
+    // color: 0x000000,
+    map: txt2,
   });
 
   let txt3 = new THREE.TextureLoader().load(wood01);
@@ -83,9 +163,8 @@ function Configurator() {
   txt3.wrapT = THREE.RepeatWrapping;
 
   const initialMaterial3 = new THREE.MeshStandardMaterial({
-    color: 0x000000,
-
-    // map: txt3,
+    // color: 0x000000,
+    map: txt3,
   });
 
   const initialMap = [
@@ -161,6 +240,7 @@ function Configurator() {
             });
             button.classList.add("active");
             activeOption = event.currentTarget.dataset.option;
+            console.log("activeOption", activeOption);
             selectOption();
             resolve(button);
           });
@@ -195,48 +275,48 @@ function Configurator() {
   //   });
   // });
 
-  function selectOption(e) {
+  function selectOption() {
     if (activeOption === "Metal1") {
       activeOption = "Metal";
-      // selectSwatch(0);
+      selectSwatch(0);
     }
     if (activeOption === "Metal2") {
       activeOption = "Metal";
-      // selectSwatch(1);
+      selectSwatch(1);
     }
     if (activeOption === "Metal3") {
       activeOption = "Metal";
-      // selectSwatch(2);
+      selectSwatch(2);
     }
 
     if (activeOption === "Pillow1") {
       activeOption = "Pillow";
-      // selectSwatch(3);
+      selectSwatch(3);
     }
 
     if (activeOption === "Pillow2") {
       activeOption = "Pillow";
-      // selectSwatch(4);
+      selectSwatch(4);
     }
 
     if (activeOption === "Pillow3") {
       activeOption = "Pillow";
-      // selectSwatch(5);
+      selectSwatch(5);
     }
 
     if (activeOption === "Wood1") {
       activeOption = "Wood";
-      // selectSwatch(6);
+      selectSwatch(6);
     }
 
     if (activeOption === "Wood2") {
       activeOption = "Wood";
-      // selectSwatch(7);
+      selectSwatch(7);
     }
 
     if (activeOption === "Wood3") {
       activeOption = "Wood";
-      // selectSwatch(8);
+      selectSwatch(8);
     }
   }
 
@@ -246,45 +326,46 @@ function Configurator() {
   //   swatch.addEventListener("click", selectSwatch);
   // }
 
-  // function selectSwatch(swatchNumber) {
-  //   let material = materials[swatchNumber];
+  function selectSwatch(swatchNumber) {
+    let material = materials[swatchNumber];
 
-  //   // let texture = new THREE.TextureLoader().load(material.texture);
-  //   let texture = new THREE.TextureLoader().load(material.texture, exportGLTF);
-  //   // let texture = new THREE.TextureLoader().load(material.texture);
+    // let texture = new THREE.TextureLoader().load(material.texture);
+    console.log("material.texture", material.texture);
+    let texture = new THREE.TextureLoader().load(material.texture, exportGLTF);
+    // let texture = new THREE.TextureLoader().load(material.texture);
 
-  //   texture.repeat.set(material.size[0], material.size[1], material.size[2]);
-  //   texture.wrapS = THREE.RepeatWrapping;
-  //   texture.wrapT = THREE.RepeatWrapping;
-  //   const new_mtl = new THREE.MeshStandardMaterial({
-  //     map: texture,
-  //   });
+    texture.repeat.set(material.size[0], material.size[1], material.size[2]);
+    texture.wrapS = THREE.RepeatWrapping;
+    texture.wrapT = THREE.RepeatWrapping;
+    const newMaterial = new THREE.MeshStandardMaterial({
+      map: texture,
+    });
 
-  //   setMaterial(activeOption, new_mtl);
-  // }
+    setMaterial(activeOption, newMaterial);
+  }
 
   /////
 
   // function selectSwatch(e) {
   //   let color = colors[e];
-  //   let new_mtl;
+  //   let newMaterial;
 
   //   let txt = new THREE.TextureLoader().load(color.texture, exportGLTF);
   //   txt.repeat.set(color.size[0], color.size[1], color.size[2]);
   //   txt.wrapS = THREE.RepeatWrapping;
   //   txt.wrapT = THREE.RepeatWrapping;
-  //   new_mtl = new THREE.MeshPhongMaterial({
+  //   newMaterial = new THREE.MeshPhongMaterial({
   //     map: txt,
   //     shininess: color.shininess ? color.shininess : 10,
   //   });
   //   console.log("Color: " + color.color);
 
-  //   console.log(new_mtl);
+  //   console.log(newMaterial);
   //   console.log(theModel);
   //   console.log(activeOption);
-  //   console.log("Active" + new_mtl);
+  //   console.log("Active" + newMaterial);
 
-  //   setMaterial(theModel, activeOption, new_mtl);
+  //   setMaterial(theModel, activeOption, newMaterial);
   // }
 
   /////
@@ -299,34 +380,56 @@ function Configurator() {
     });
   }
 
+  var gltfExporter = new GLTFExporter();
+
   function exportGLTF() {
-    var gltfExporter = new GLTFExporter();
     console.log(gltfScene);
+    console.log(imgsLoaded);
+    // if (imgsLoaded) {
+    // console.log("dddd", metal01.current);
+    // console.log("dddd", metal02.current);
+    // console.log("dddd", metal03.current);
+    // console.log("dddd", pillow01.current);
+    // console.log("dddd", pillow02.current);
+    // console.log("dddd", pillow03.current);
+    // console.log("dddd", wood01.current);
+    // console.log("dddd", wood02.current);
+    // console.log("dddd", wood03.current);
 
     gltfExporter.parse(gltfScene, function (gltf) {
-      console.log(gltf);
+      // console.log(imgsLoaded);
+      // console.log(gltf);
 
-      console.log("result1", gltf);
+      // console.log("result1", gltf);
 
-      if (gltf) {
-        console.log("result2", gltf);
+      // if (gltf) {
+      //   console.log("result2", gltf);
 
-        let output = JSON.stringify(gltf, null, 2);
-        let blob = new Blob([output], { type: "application/json" });
-        let myBlob = URL.createObjectURL(blob);
-        document.getElementById("viewer").src = myBlob;
+      let output = JSON.stringify(gltf, null, 2);
+      // if (output) {
+      //   console.log("output");
+      let blob = new Blob([output], { type: "application/json" });
+      // if (blob) {
+      //   console.log("blob");
+      let myBlob = URL.createObjectURL(blob);
 
-        var reader = new FileReader();
+      // if (myBlob) {
+      //   console.log("myBlob");
+      document.getElementById("viewer").src = myBlob;
 
-        reader.readAsDataURL(blob);
-        reader.onloadend = function () {
-          // var base64data = reader.gltf;
-          // console.log("base64data: " + base64data);
-        };
-      } else {
-        console.log("ohh noooo");
-      }
+      // var reader = new FileReader();
+      // reader.readAsDataURL(blob);
+
+      // reader.onloadend = function () {
+      //   // var base64data = reader.gltf;
+      //   // console.log("base64data: " + base64data);
+      // };
+      //       }
+      //     }
+      //   }
+      // }
     });
+    // }
   }
 
   // TEST START
